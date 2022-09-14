@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="1.7">
+      <module name="Pelikula.app" target="11" />
+      <module name="Pelikula.core-commons" target="1.8" />
+      <module name="Pelikula.core-commons.main" target="1.8" />
+      <module name="Pelikula.core-commons.test" target="1.8" />
+      <module name="Pelikula.core-data" target="11" />
+      <module name="Pelikula.core-designsystem" target="11" />
+      <module name="Pelikula.core-network" target="11" />
+      <module name="Pelikula.core-remote" target="11" />
+      <module name="Pelikula.core-testing" target="11" />
+      <module name="Pelikula.core-ui" target="11" />
+      <module name="Pelikula.feature-home" target="11" />
+      <module name="Pelikula.feature-latest-movies" target="11" />
+      <module name="Pelikula.feature-top-rated-movies" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
