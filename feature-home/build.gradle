@@ -47,6 +47,7 @@ dependencies {
     implementation project(path: ":core-model")
     implementation project(path: ":core-commons")
     implementation project(path: ":core-ui")
+    implementation project(path: ":core-designsystem")
 
     testImplementation project(path: ":core-testing")
 
@@ -57,6 +58,4 @@ dependencies {
 
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
-
-    implementation "com.jakewharton.timber:timber:$timber_version"
 }

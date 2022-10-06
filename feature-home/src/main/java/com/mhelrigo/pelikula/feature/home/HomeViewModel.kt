@@ -9,12 +9,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import com.mhelrigo.pelikula.core.commons.Result
+import com.mhelrigo.pelikula.core.model.MovieList
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(private val pelikulaRepository: PelikulaRepository) :
     ViewModel() {
 
-    private val topRatedMovies: Flow<Result<List<Movie>>> =
+    private val topRatedMovies: Flow<Result<MovieList>> =
         pelikulaRepository.getTopRatedMovies(page = 1).asResult()
 
     val topRatedMoviesState: StateFlow<MoviesUiState> = topRatedMovies
@@ -25,7 +26,7 @@ class HomeViewModel @Inject constructor(private val pelikulaRepository: Pelikula
             initialValue = MoviesUiState.Loading
         )
 
-    private val popularMovies: Flow<Result<List<Movie>>> =
+    private val popularMovies: Flow<Result<MovieList>> =
         pelikulaRepository.getPopularMovies(page = 1).asResult()
 
     val popularMoviesState: StateFlow<MoviesUiState> = popularMovies
@@ -36,7 +37,7 @@ class HomeViewModel @Inject constructor(private val pelikulaRepository: Pelikula
             initialValue = MoviesUiState.Loading
         )
 
-    private val nowPlayingMovies: Flow<Result<List<Movie>>> =
+    private val nowPlayingMovies: Flow<Result<MovieList>> =
         pelikulaRepository.getNowPlayingMovies(page = 1).asResult()
 
     val nowPlayingMoviesState: StateFlow<MoviesUiState> = nowPlayingMovies
@@ -51,19 +52,19 @@ class HomeViewModel @Inject constructor(private val pelikulaRepository: Pelikula
 sealed class MoviesUiState {
     class Success(var movies: List<Movie>) : MoviesUiState()
     object Loading : MoviesUiState()
-    class Error(message: String) : MoviesUiState()
+    class Error(val message: String) : MoviesUiState()
 }
 
-fun Flow<Result<List<Movie>>>.transform(): Flow<MoviesUiState> = map { value ->
+fun Flow<Result<MovieList>>.transform(): Flow<MoviesUiState> = map { value ->
     when (value) {
         is Result.Success -> {
-            MoviesUiState.Success(value.data)
+            MoviesUiState.Success(value.data.results)
         }
         is Result.Loading -> {
             MoviesUiState.Loading
         }
         is Result.Error -> {
-            MoviesUiState.Error(value.exception?.message!!)
+            MoviesUiState.Error("Something went wrong.")
         }
     }
 }

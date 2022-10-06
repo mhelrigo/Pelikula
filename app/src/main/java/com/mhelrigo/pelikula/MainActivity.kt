@@ -7,11 +7,19 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import com.mhelrigo.pelikula.core.designsystem.theme.PelikulaTheme
-import com.mhelrigo.pelikula.feature.home.HomeScreen
+import com.mhelrigo.pelikula.feature.expandedmovielist.navigation.ExpandedMovieListNavigation
+import com.mhelrigo.pelikula.feature.expandedmovielist.navigation.expandedMovieListGraph
 import com.mhelrigo.pelikula.feature.home.HomeViewModel
+import com.mhelrigo.pelikula.feature.home.navigation.HomeNavigation
+import com.mhelrigo.pelikula.feature.home.navigation.homeGraph
+import com.mhelrigo.pelikula.feature.moviedetails.navigation.MovieDetailDestination
+import com.mhelrigo.pelikula.feature.moviedetails.navigation.movieDetailGraph
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -28,14 +36,35 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    HomeScreen(
+                    val navHostController = rememberNavController()
+                    PelikulaNavHost(
                         modifier = Modifier,
-                        topRatedMoviesUiState = homeViewModel.topRatedMoviesState.collectAsState().value,
-                        popularMoviesUiState = homeViewModel.popularMoviesState.collectAsState().value,
-                        nowPlayingMoviesUiState = homeViewModel.nowPlayingMoviesState.collectAsState().value
+                        navHostController = navHostController
                     )
                 }
             }
         }
+    }
+}
+
+@Composable
+fun PelikulaNavHost(
+    modifier: Modifier,
+    navHostController: NavHostController,
+) {
+    NavHost(
+        navController = navHostController,
+        startDestination = HomeNavigation.route,
+        modifier = modifier
+    ) {
+        homeGraph(navigateToMovieDetail = {
+            navHostController.navigate("${MovieDetailDestination.route}/$it")
+        }, navigateToExpandedMovieList = {
+            navHostController.navigate("${ExpandedMovieListNavigation.route}/${it.value}")
+        })
+        movieDetailGraph(onBackPressed = { navHostController.popBackStack() })
+        expandedMovieListGraph(onBackPressed = { navHostController.popBackStack() }, navigateToMovieDetail = {
+            navHostController.navigate("${MovieDetailDestination.route}/$it")
+        })
     }
 }

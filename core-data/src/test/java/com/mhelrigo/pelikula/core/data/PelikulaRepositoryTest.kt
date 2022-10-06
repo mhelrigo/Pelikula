@@ -26,7 +26,7 @@ class PelikulaRepositoryTest {
             ).first()
 
             assertEquals(
-                movies.first().id,
+                movies.results.first().id,
                 fakeNetworkDataSourceImpl.getTopRated(
                     page = 1
                 ).results.first().id
@@ -42,7 +42,7 @@ class PelikulaRepositoryTest {
             ).first()
 
             assertEquals(
-                movies.first().id,
+                movies.results.first().id,
                 fakeNetworkDataSourceImpl.getPopular(
                     page = 1
                 ).results.first().id
@@ -58,10 +58,55 @@ class PelikulaRepositoryTest {
             ).first()
 
             assertEquals(
-                movies.first().id,
+                movies.results.first().id,
                 fakeNetworkDataSourceImpl.getNowPlayingMovies(
                     page = 1
                 ).results.first().id
+            )
+        }
+    }
+
+    @Test
+    fun `movie_detail_came_from_a_remote_data_source`() {
+        runTest {
+            val movieDetail = pelikulaRepositoryImpl.getMovieDetail(550)
+
+            assertEquals(movieDetail.first().id, fakeNetworkDataSourceImpl.getMovieDetail(550).id)
+        }
+    }
+
+    @Test
+    fun `movie_credit_came_from_a_remote_data_source`() {
+        runTest {
+            val movieCredit = pelikulaRepositoryImpl.getMovieCredits(550)
+
+            assertEquals(
+                movieCredit.first().casts[0].id,
+                fakeNetworkDataSourceImpl.getMovieCredits(550).casts[0].id
+            )
+        }
+    }
+
+    @Test
+    fun `movie_images_came_from_a_remote_data_source`() {
+        runTest {
+            val movieImages = pelikulaRepositoryImpl.getMovieImages(550)
+
+            assertEquals(
+                movieImages.first().id,
+                fakeNetworkDataSourceImpl.getMovieImages(550).id
+            )
+        }
+    }
+
+    @Test
+    fun `movie_recommendation_came_from_a_remote_data_source`() {
+        runTest {
+            val movieRecommendations = pelikulaRepositoryImpl.getMovieRecommendations(550)
+
+            assertEquals(
+                movieRecommendations.first().results[0].id,
+                fakeNetworkDataSourceImpl.getMovieRecommendations(550).results[0].id
             )
         }
     }

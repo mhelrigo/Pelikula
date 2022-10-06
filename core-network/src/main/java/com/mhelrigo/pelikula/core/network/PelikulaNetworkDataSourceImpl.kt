@@ -1,8 +1,6 @@
 package com.mhelrigo.pelikula.core.network
 
-import com.mhelrigo.pelikula.core.network.model.NowPlayingMoviesApiResponse
-import com.mhelrigo.pelikula.core.network.model.PopularMoviesApiResponse
-import com.mhelrigo.pelikula.core.network.model.TopRatedMoviesApiResponse
+import com.mhelrigo.pelikula.core.network.model.*
 import com.mhelrigo.pelikula.core.network.retrofit.PelikulaApi
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -17,15 +15,31 @@ class PelikulaNetworkDataSourceImpl @Inject constructor() :
 
     private val pelikulaApi = retrofit.create(PelikulaApi::class.java)
 
-    override suspend fun getTopRated(page: Int): TopRatedMoviesApiResponse {
+    override suspend fun getTopRated(page: Int): MovieListApiResponse {
         return pelikulaApi.getTopRated(page = page)
     }
 
-    override suspend fun getPopular(page: Int): PopularMoviesApiResponse {
+    override suspend fun getPopular(page: Int): MovieListApiResponse {
         return pelikulaApi.getPopular(page = page)
     }
 
-    override suspend fun getNowPlayingMovies(page: Int): NowPlayingMoviesApiResponse {
+    override suspend fun getNowPlayingMovies(page: Int): MovieListApiResponse {
         return pelikulaApi.getNowPlaying(page = page)
+    }
+
+    override suspend fun getMovieDetail(movieId: Int): MovieDetailApiResponse {
+        return pelikulaApi.getMovieDetail(movieId = movieId)
+    }
+
+    override suspend fun getMovieCredits(movieId: Int): CreditsApiResponse {
+        return pelikulaApi.getCredits(movieId = movieId)
+    }
+
+    override suspend fun getMovieImages(movieId: Int): MovieImagesApiResponse {
+        return pelikulaApi.getMovieImages(movieId = movieId)
+    }
+
+    override suspend fun getMovieRecommendations(movieId: Int) : MovieListApiResponse {
+        return pelikulaApi.getMovieRecommendations(movieId = movieId)
     }
 }

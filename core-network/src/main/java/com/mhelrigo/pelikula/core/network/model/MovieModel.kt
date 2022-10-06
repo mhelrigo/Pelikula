@@ -12,14 +12,14 @@ data class MovieModel(
     @SerializedName("genre_ids")
     val genreIds : List<Int>,
     @SerializedName("backdrop_path")
-    val backDropPath: String,
+    val backDropPath: String? = null,
     @SerializedName("original_language")
     val originalLanguage: String,
     @SerializedName("original_title")
     val originalTitle: String,
     val overview: String,
     @SerializedName("poster_path")
-    val posterPath: String,
+    val posterPath: String? = null,
     @SerializedName("release_date")
     val releaseDate: String,
     val title: String,

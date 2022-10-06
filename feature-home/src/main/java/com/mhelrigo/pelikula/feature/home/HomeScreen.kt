@@ -1,87 +1,48 @@
 package com.mhelrigo.pelikula.feature.home
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.mhelrigo.pelikula.core.model.Movie
-import com.mhelrigo.pelikula.core.ui.Loading
-import com.mhelrigo.pelikula.core.ui.MovieScreen
-import com.mhelrigo.pelikula.core.ui.Error
+import com.mhelrigo.pelikula.core.model.MovieListType
+
+@Composable
+fun HomeRoute(
+    expandMovie: (movie: Movie) -> Unit,
+    expandMovieList: (type: MovieListType) -> Unit,
+    homeViewModel: HomeViewModel = hiltViewModel()
+) {
+    HomeScreen(
+        topRatedMoviesUiState = homeViewModel.topRatedMoviesState.collectAsState().value,
+        popularMoviesUiState = homeViewModel.popularMoviesState.collectAsState().value,
+        nowPlayingMoviesUiState = homeViewModel.nowPlayingMoviesState.collectAsState().value,
+        expandMovie = expandMovie,
+        expandMovieList = expandMovieList
+    )
+}
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier,
     topRatedMoviesUiState: MoviesUiState,
     popularMoviesUiState: MoviesUiState,
-    nowPlayingMoviesUiState: MoviesUiState
+    nowPlayingMoviesUiState: MoviesUiState,
+    expandMovie: (movie: Movie) -> Unit,
+    expandMovieList: (type: MovieListType) -> Unit
 ) {
-    Column(modifier = modifier) {
-        Text("Being watched")
-        NowPlayingMovies(nowPlayingMoviesUiState)
-        Text("Popular Now")
-        PopularMovies(popularMoviesUiState)
-        Text("All time favorites")
-        TopRatedMovies(topRatedMoviesUiState)
-    }
+    MovieList(
+        modifier = Modifier
+            .fillMaxHeight()
+            .verticalScroll(
+                rememberScrollState()
+            ),
+        topRatedMoviesUiState = topRatedMoviesUiState,
+        popularMoviesUiState = popularMoviesUiState,
+        nowPlayingMoviesUiState = nowPlayingMoviesUiState,
+        expandMovie = expandMovie,
+        expandMovieList = expandMovieList
+    )
 }
-
-@Composable
-fun TopRatedMovies(topRatedMoviesUiState: MoviesUiState) =
-    when (topRatedMoviesUiState) {
-        is MoviesUiState.Loading -> {
-            Loading(modifier = Modifier)
-        }
-        is MoviesUiState.Error -> {
-            Error(modifier = Modifier)
-        }
-        is MoviesUiState.Success -> {
-            Movies(modifier = Modifier, topRatedMoviesUiState.movies)
-        }
-    }
-
-@Composable
-fun PopularMovies(popularMoviesUiState: MoviesUiState) =
-    when (popularMoviesUiState) {
-        is MoviesUiState.Loading -> {
-            Loading(modifier = Modifier)
-        }
-        is MoviesUiState.Error -> {
-            Error(modifier = Modifier)
-        }
-        is MoviesUiState.Success -> {
-            Movies(modifier = Modifier, popularMoviesUiState.movies)
-        }
-    }
-
-@Composable
-fun NowPlayingMovies(nowPlayingMoviesUiState: MoviesUiState) =
-    when (nowPlayingMoviesUiState) {
-        is MoviesUiState.Loading -> {
-            Loading(modifier = Modifier)
-        }
-        is MoviesUiState.Error -> {
-            Error(modifier = Modifier)
-        }
-        is MoviesUiState.Success -> {
-            Movies(modifier = Modifier, nowPlayingMoviesUiState.movies)
-        }
-    }
-
-@Composable
-fun Movies(modifier: Modifier, movies: List<Movie>) {
-    LazyRow {
-        items(items = movies, key = { item: Movie -> item.id }) { movie ->
-            MovieScreen(
-                modifier = Modifier
-                    .padding(start = 8.dp)
-                    .widthIn(64.dp)
-                    .height(100.dp), movie = movie
-            )
-        }
-    }
-}
-

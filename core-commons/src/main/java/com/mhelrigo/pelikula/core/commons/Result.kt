@@ -18,6 +18,7 @@ fun <T> Flow<T>.asResult(): Flow<Result<T>> {
         }
         .onStart { emit(Result.Loading) }
         .catch {
+            println("Network Error: $it")
             emit(Result.Error(it))
         }
 }

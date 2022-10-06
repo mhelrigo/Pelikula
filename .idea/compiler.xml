@@ -12,8 +12,10 @@
       <module name="Pelikula.core-remote" target="11" />
       <module name="Pelikula.core-testing" target="11" />
       <module name="Pelikula.core-ui" target="11" />
+      <module name="Pelikula.feature-expandedmovielist" target="11" />
       <module name="Pelikula.feature-home" target="11" />
       <module name="Pelikula.feature-latest-movies" target="11" />
+      <module name="Pelikula.feature-moviedetails" target="11" />
       <module name="Pelikula.feature-top-rated-movies" target="11" />
     </bytecodeTargetLevel>
   </component>
